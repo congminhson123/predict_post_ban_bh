@@ -26,21 +26,19 @@ keywords = ['thương mại',
             'nông nghiệp',
             'tiền gửi',
             'xã hội']
-body = ''
-list_message = set()
-list_description = set()
+list_post = set()
 for word in keywords:
     body = {
         'size': 200,
         'query': {
             'bool': {
                 'must': [
-                    {'bool': {
-                        'should': [
-                            {'match_phrase': {'description': word}},
-                            {'match_phrase': {'message': word}}
-                        ]
-                    }},
+                    # {'bool': {
+                    #     'should': [
+                    #         {'match_phrase': {'description': word}},
+                    #         {'match_phrase': {'message': word}}
+                    #     ]
+                    # }},
                     {'bool': {
                         'should': [
                             {'match_phrase': {'description': 'bảo hiểm'}},
@@ -66,7 +64,7 @@ for word in keywords:
 
 month = 8
 month = f'{month:02d}'
-for i in range(27, 30):
+for i in range(25, 29):
     day = i
     day = f'{day:02d}'
     index = f'dsminer_post_2021-{month}-{day}'
@@ -77,8 +75,8 @@ for i in range(27, 30):
             for res in response:
                 message = res['_source']['message']
                 description = res['_source']['description']
-                list_message.add(message)
-                list_description.add(description)
+                list_post.add(message)
+                list_post.add(description)
 
             # print('pass' + ' ' + index)
             # print(len(list_message))
@@ -88,17 +86,18 @@ for i in range(27, 30):
             print(sys.exc_info()[0])
             print('errol' + ' ' + index)
             time.sleep(time_sleep)
-path = r"post_amount.txt"
-out_file = open(path, "w", encoding="utf-8")
-list_data = []
-messages = list(list_message)
-descriptions = list(list_description)
-totalAmount = len(descriptions)
-for i in range(0, totalAmount):
-    data = ('MESSAGE\n' + str(messages[i])
-            +  '\nDESCRIPTION\n' + str(descriptions[i])
-            )
-    list_data.append(data)
-    print(i)
-df = DataFrame(list_data)
-df.to_csv(r'data.csv')
+# path = r"post_amount.txt"
+# out_file = open(path, "w", encoding="utf-8")
+# list_data = []
+# messages = list(list_message)
+# descriptions = list(list_description)
+# totalAmount = len(descriptions)
+# for i in range(0, totalAmount):
+#     data = ('MESSAGE\n' + str(messages[i])
+#             +  '\nDESCRIPTION\n' + str(descriptions[i])
+#             )
+#     list_data.append(data)
+#     print(i)
+df = DataFrame(list_post)
+df.to_excel(r'data.xlsx', encoding='utf-8')
+
