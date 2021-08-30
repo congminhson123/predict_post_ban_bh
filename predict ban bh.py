@@ -27,7 +27,7 @@ keywords = ['thương mại',
             'tiền gửi',
             'xã hội']
 list_post = list()
-link_post = list()
+docId_post = list()
 for word in keywords:
     body = {
         'size': 200,
@@ -76,13 +76,13 @@ for i in range(25, 29):
             for res in response:
                 message = res['_source']['message']
                 description = res['_source']['description']
-                link = res['_source']['link']
+                docId = res['_source']['docId']
                 if message is not None:
                     list_post.append(message)
-                    link_post.append(link)
+                    docId_post.append(docId)
                 if description is not None:
                     list_post.append(description)
-                    link_post.append(link)
+                    docId_post.append(docId)
 
             # print('pass' + ' ' + index)
             # print(len(list_message))
@@ -105,8 +105,6 @@ for i in range(25, 29):
 #     list_data.append(data)
 #     print(i)
 
-print(len(link_post))
-print(len(list_post))
-df = DataFrame({'link_post':link_post, 'post':list_post})
+df = DataFrame({'docId_post':docId_post, 'post':list_post})
 df.to_excel(r'data.xlsx', encoding='utf-8')
 
