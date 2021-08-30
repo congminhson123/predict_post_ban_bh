@@ -101,6 +101,6 @@ for i in range(25, 29):
 #             )
 #     list_data.append(data)
 #     print(i)
-df = DataFrame({'link_post':{link_post}, 'post':{list_post}})
+df = DataFrame({'link_post':[link_post], 'post':[list_post]})
 df.to_excel(r'data.xlsx', encoding='utf-8')
 
