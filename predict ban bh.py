@@ -25,10 +25,10 @@ keywords = ['thương mại',
             'nông nghiệp',
             'tiền gửi',
             'xã hội']
-
+body = ''
+list_message = set()
+list_description = set()
 for word in keywords:
-    list_message = set()
-    list_description = set()
     body = {
         'size': 200,
         'query': {
@@ -70,7 +70,7 @@ for i in range(27, 30):
     day = f'{day:02d}'
     index = f'dsminer_post_2021-{month}-{day}'
     checkExcept = True
-    while checkExcept == True:
+    while checkExcept:
         try:
             response = es.search(index=index, body=body, request_timeout=30)['hits']['hits']
             for res in response:
@@ -90,13 +90,13 @@ for i in range(27, 30):
 path = r"post_amount.txt"
 out_file = open(path, "w", encoding="utf-8")
 
-messages=list(list_message)
-descriptions=list(list_description)
+messages = list(list_message)
+descriptions = list(list_description)
 totalAmount = len(descriptions)
 for i in range(0, totalAmount):
-    out_file.write('MESSAGE\n'+str(messages[i])
-                   +'DESCRIPTION\n'+ str(descriptions[i])
+    out_file.write('MESSAGE\n' + str(messages[i])
+                   + 'DESCRIPTION\n' + str(descriptions[i])
                    + '\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n'
                    )
-    print (i)
+    print(i)
 out_file.close()
