@@ -27,6 +27,7 @@ keywords = ['thương mại',
             'tiền gửi',
             'xã hội']
 list_post = set()
+link_post = set()
 for word in keywords:
     body = {
         'size': 200,
@@ -75,8 +76,10 @@ for i in range(25, 29):
             for res in response:
                 message = res['_source']['message']
                 description = res['_source']['description']
+                link = res['_source']['link']
                 list_post.add(message)
                 list_post.add(description)
+                link_post.add(link)
 
             # print('pass' + ' ' + index)
             # print(len(list_message))
@@ -98,6 +101,6 @@ for i in range(25, 29):
 #             )
 #     list_data.append(data)
 #     print(i)
-df = DataFrame(list_post)
+df = DataFrame({'link_post':{link_post}, 'post':{list_post}})
 df.to_excel(r'data.xlsx', encoding='utf-8')
 
