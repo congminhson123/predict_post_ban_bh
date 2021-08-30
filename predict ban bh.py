@@ -1,7 +1,6 @@
 import time
 import sys
 from elasticsearch import Elasticsearch
-from pandas import DataFrame
 
 es = Elasticsearch('http://103.74.122.196:9200')
 
@@ -35,12 +34,12 @@ for word in keywords:
         'query': {
             'bool': {
                 'must': [
-                    {'bool': {
-                        'should': [
-                            {'match_phrase': {'description': word}},
-                            {'match_phrase': {'message': word}}
-                        ]
-                    }},
+                    # {'bool': {
+                    #     'should': [
+                    #         {'match_phrase': {'description': word}},
+                    #         {'match_phrase': {'message': word}}
+                    #     ]
+                    # }},
                     {'bool': {
                         'should': [
                             {'match_phrase': {'description': 'bảo hiểm'}},
@@ -90,15 +89,14 @@ for i in range(27, 30):
             time.sleep(time_sleep)
 path = r"post_amount.txt"
 out_file = open(path, "w", encoding="utf-8")
-list_data = []
+
 messages = list(list_message)
 descriptions = list(list_description)
 totalAmount = len(descriptions)
 for i in range(0, totalAmount):
-    data = ('MESSAGE\n' + str(messages[i])
-            + '\nDESCRIPTION\n' + str(descriptions[i])
-            )
-    list_data.append(data)
+    out_file.write('MESSAGE\n' + str(messages[i])
+                   + '\DESCRIPTION\n' + str(descriptions[i])
+                   + '\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n'
+                   )
     print(i)
-df = DataFrame(list_data)
-df.to_csv(r'data.csv')
+out_file.close()
