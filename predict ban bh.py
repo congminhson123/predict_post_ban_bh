@@ -112,7 +112,7 @@ for word in keywords:
                         print('errol' + ' ' + index)
                         time.sleep(time_sleep)
     result.append(len(list_userId))
-    path = r"C:\Users\acer\Documents\hoc tap\thuc tap bao hiem\check độ phủ\post_amount.txt"
+    path = r"post_amount.txt"
     out_file = open(path, "w", encoding="utf-8")
     for i in result:
         out_file.write(str(i) + '\n')
