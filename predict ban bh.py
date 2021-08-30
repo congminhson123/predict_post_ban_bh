@@ -26,8 +26,8 @@ keywords = ['thương mại',
             'nông nghiệp',
             'tiền gửi',
             'xã hội']
-list_post = set()
-link_post = set()
+list_post = list()
+link_post = list()
 for word in keywords:
     body = {
         'size': 200,
@@ -77,9 +77,12 @@ for i in range(25, 29):
                 message = res['_source']['message']
                 description = res['_source']['description']
                 link = res['_source']['link']
-                list_post.add(message)
-                list_post.add(description)
-                link_post.add(link)
+                if message is not None:
+                    list_post.append(message)
+                    link_post.append(link)
+                if description is not None:
+                    list_post.append(description)
+                    link_post.append(link)
 
             # print('pass' + ' ' + index)
             # print(len(list_message))
@@ -101,10 +104,9 @@ for i in range(25, 29):
 #             )
 #     list_data.append(data)
 #     print(i)
-link = list(link_post)
-post = list(list_post)
-print(len(link))
-print(len(post))
-df = DataFrame({'link_post':link, 'post':post})
+
+print(len(link_post))
+print(len(list_post))
+df = DataFrame({'link_post':link_post, 'post':list_post})
 df.to_excel(r'data.xlsx', encoding='utf-8')
 
