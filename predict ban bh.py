@@ -95,8 +95,9 @@ descriptions = list(list_description)
 totalAmount = len(descriptions)
 for i in range(0, totalAmount):
     out_file.write('MESSAGE\n' + str(messages[i])
-                   + 'DESCRIPTION\n' + str(descriptions[i])
+                   + '\DESCRIPTION\n' + str(descriptions[i])
                    + '\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n'
                    )
     print(i)
 out_file.close()
+n
