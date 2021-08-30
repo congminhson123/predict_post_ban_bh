@@ -100,4 +100,3 @@ for i in range(0, totalAmount):
                    )
     print(i)
 out_file.close()
-n
