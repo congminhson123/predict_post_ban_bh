@@ -96,7 +96,7 @@ descriptions = list(list_description)
 totalAmount = len(descriptions)
 for i in range(0, totalAmount):
     data = ('MESSAGE\n' + str(messages[i])
-            + '\nDESCRIPTION\n' + str(descriptions[i])
+            +  '\nDESCRIPTION\n' + str(descriptions[i])
             )
     list_data.append(data)
     print(i)
