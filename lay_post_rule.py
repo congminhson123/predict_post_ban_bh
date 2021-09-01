@@ -6,66 +6,59 @@ from pandas import DataFrame
 es = Elasticsearch('http://103.74.122.196:9200')
 
 time_sleep = 1
-keywords = ['thương mại',
-            'nhân thọ',
-            'sức khỏe',
-            'tai nạn',
-            'y tế',
-            'phi nhân thọ',
-            'tài sản',
-            'thiệt hại',
-            'hàng hóa',
-            'hàng không',
-            'xe cơ giới',
-            'cháy nổ',
-            'tàu',
-            'trách nhiệm',
-            'tín dụng',
-            'tài chính',
-            'kinh doanh',
-            'nông nghiệp',
-            'tiền gửi',
-            'xã hội']
+keywords = []
+mustnot = []
+kw = open("keywords.txt", encoding="utf-8")
+mn = open("mustnot.txt", encoding="utf-8")
+for i in kw:
+    keywords.append(i.strip())
+for i in mn:
+    mustnot.append(i.strip())
+
 list_post = list()
 docId_post = list()
-for word in keywords:
-    body = {
-        'size': 200,
-        'query': {
-            'bool': {
-                'must': [
-                    # {'bool': {
-                    #     'should': [
-                    #         {'match_phrase': {'description': word}},
-                    #         {'match_phrase': {'message': word}}
-                    #     ]
-                    # }},
-                    {'bool': {
+user_id = set()
+body = {
+    'size': 10000,
+    'query': {
+        'bool': {
+            'must': [
+                {'bool': {
                         'should': [
-                            {'match_phrase': {'description': 'bảo hiểm'}},
-                            {'match_phrase': {'message': 'bảo hiểm'}}
+
                         ]
-                    }},
-                    # {'match_phrase': {
-                    #     'docType': 'user_post'
-                    # }}
-                ],
-                # 'must_not': {
-                #     'match_phrase': {
-                #         'docType': 'page_post'
-                #     }
-                # }
-            }
-        },
-        'track_total_hits': True,
-        # '_source': [
-        #
-        # ]
-    }
+                }},
+                {'match_phrase': {
+                    'docType': 'user_post'
+                }}
+            ],
+            'must_not': [
+                {'bool': {
+                        'should': [
+
+                        ]
+                }},
+            ]
+        }
+    },
+    'track_total_hits': True,
+    # '_source': [
+    #     'userId', 'message', 'description'
+    # ]
+}
+
+for i in keywords:
+    body["query"]["bool"]["must"][0]["bool"]["should"].append({"match_phrase": {"message": i}})
+    body["query"]["bool"]["must"][0]["bool"]["should"].append({"match_phrase": {"description": i}})
+for i in mustnot:
+    body["query"]["bool"]["must_not"][0]["bool"]["should"].append({"match_phrase": {"message": i}})
+    body["query"]["bool"]["must_not"][0]["bool"]["should"].append({"match_phrase": {"description": i}})
+
+
 
 month = 8
 month = f'{month:02d}'
-for i in range(25, 29):
+for i in range(1, 31):
     day = i
     day = f'{day:02d}'
     index = f'dsminer_post_2021-{month}-{day}'
@@ -77,6 +70,7 @@ for i in range(25, 29):
                 message = res['_source']['message']
                 description = res['_source']['description']
                 docId = res['_source']['docId']
+                user_id.add(res['_source']['userId'])
                 if message is not None:
                     list_post.append(message)
                     docId_post.append(docId)
@@ -104,7 +98,10 @@ for i in range(25, 29):
 #             )
 #     list_data.append(data)
 #     print(i)
-
+print(len(user_id))
+with open('user_id.txt', 'w') as f:
+    for item in user_id:
+        f.write(item+"\n")
 df = DataFrame({'docId_post':docId_post, 'post':list_post})
-df.to_excel(r'data.xlsx', encoding='utf-8')
+df.to_excel(r'data_rule.xlsx', encoding='utf-8')
 
