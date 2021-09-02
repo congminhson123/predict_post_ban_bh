@@ -58,7 +58,7 @@ for i in mustnot:
 
 month = 8
 month = f'{month:02d}'
-for i in range(29, 31):
+for i in range(1, 32    ):
     day = i
     day = f'{day:02d}'
     index = f'dsminer_post_2021-{month}-{day}'
@@ -214,9 +214,42 @@ for index, row in df.iterrows():
         if ('mb ageas' or 'mbageas') in row['post']:
             cty_bh.append('mb ageas')
             break
+        if 'prudential' in row['post']:
+            cty_bh.append('prudential')
+            break
+        if 'generali' in row['post']:
+            cty_bh.append('generali')
+            break
+        if ('chubblife' or 'chubb life') in row['post']:
+            cty_bh.append('chubb life')
+            break
+        if 'hanwha' in row['post']:
+            cty_bh.append('hanwha')
+            break
+        if ('sunlife' or 'sun life') in row['post']:
+            cty_bh.append('sun life')
+            break
+        for i in classify_kw[159:165]:
+            if i in row['post']:
+                cty_bh.append('bảo minh')
+                break
+        for i in classify_kw[165:171]:
+            if i in row['post']:
+                cty_bh.append('phú hưng')
+                break
+        for i in classify_kw[171:174]:
+            if i in row['post']:
+                cty_bh.append('bidv metlife')
+                break
         break
+    if not type_bh: type_bh.append('other')
+    if not cty_bh: cty_bh.append('other')
+
     row['loại bảo hiểm'] = ', '.join(str(s) for s in type_bh)
     row['công ty bảo hiểm'] = ', '.join(str(s) for s in cty_bh)
+df = df.drop('post', 1)
+df.reset_index(drop=True, inplace=True)
+
 print(df)
 
 df.to_excel(r'classify_user.xlsx', encoding='utf-8')
