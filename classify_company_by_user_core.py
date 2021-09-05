@@ -53,8 +53,8 @@ try:
             works=doc['_source']['works']
             if len(works):
                 for work in works:
-                    position = work['position']
-                    employer = work['employer']
+                    position = work['position'].lower()
+                    employer = work['employer'].lower()
                     if position is not None:
                         list_user_work.append(position)
                         user_id.append(doc['_source']['id'])
@@ -150,7 +150,6 @@ for index, row in df.iterrows():
         break
     if not company: company.append('other')
     row['công ty bảo hiểm'] = ', '.join(str(s) for s in company)
-df = df.drop('works', 1)
 df.reset_index(drop=True, inplace=True)
 print(df)
 df.to_excel(r'classify_company_by_user_core.xlsx', encoding='utf-8')
