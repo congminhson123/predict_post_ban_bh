@@ -51,15 +51,16 @@ try:
 
         for doc in res['hits']['hits']:
             works=doc['_source']['works']
-            if len(works):
+            if len(works)>1:
                 for work in works:
                     position = work['position']
                     employer = work['employer']
+
                     if position is not None:
-                        list_user_work.append(position)
+                        list_user_work.append(position.lower())
                         user_id.append(doc['_source']['id'])
                     if employer is not None:
-                        list_user_work.append(employer)
+                        list_user_work.append(employer.lower())
                         user_id.append(doc['_source']['id'])
 
         # request sử dụng scroll api
