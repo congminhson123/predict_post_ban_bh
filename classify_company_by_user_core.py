@@ -50,8 +50,8 @@ try:
     while len(res['hits']['hits']):
 
         for doc in res['hits']['hits']:
-            works=doc['_source']['works']
-            if len(works)>1:
+            works = doc['_source']['works']
+            if len(works) > 1:
                 for work in works:
                     position = work['position']
                     employer = work['employer']
@@ -72,7 +72,7 @@ try:
 except:
     print(sys.exc_info()[0])
     time.sleep(time_sleep)
-df = DataFrame({'user_id':user_id, 'works':list_user_work})
+df = DataFrame({'user_id': user_id, 'works': list_user_work})
 # nan_value = float("NaN")
 # df.replace("", nan_value, inplace=True)
 # df = df.dropna(axis=0, subset=['works'])
@@ -80,15 +80,90 @@ df = DataFrame({'user_id':user_id, 'works':list_user_work})
 #
 # df.to_excel(r'classify_company_by_user_core.xlsx', encoding='utf-8')
 df = df.drop_duplicates()
-df['works'] = df.groupby(['user_id'])['works'].transform(lambda x : ', '.join(x))
+df['works'] = df.groupby(['user_id'])['works'].transform(lambda x: ', '.join(x))
 df = df.drop_duplicates()
-classify_kw= []
+classify_kw = []
 cls_kw = open("classify_keyword.txt", encoding="utf-8")
 for i in cls_kw:
     classify_kw.append(i.strip())
 df['công ty bảo hiểm'] = ""
+df['loại bảo hiểm'] = ""
 for index, row in df.iterrows():
     company = []
+    type = []
+    for i in classify_kw[0:8]:
+        if i in row['works']:
+            type.append('bảo hiểm y tế')
+            break
+    for i in classify_kw[8:16]:
+        if i in row['works']:
+            type.append('bảo hiểm nhân thọ')
+            break
+    for i in classify_kw[16:33]:
+        if i in row['works']:
+            type.append('bảo hiểm sức khỏe')
+            break
+    for i in classify_kw[33:41]:
+        if i in row['works']:
+            type.append('bảo hiểm thân thể')
+            break
+    for i in classify_kw[41:59]:
+        if i in row['works']:
+            type.append('bảo hiểm xe cơ giới')
+            break
+    for i in classify_kw[59:67]:
+        if i in row['works']:
+            type.append('bảo hiểm xã hội')
+            break
+    for i in classify_kw[67:71]:
+        if i in row['works']:
+            type.append('bảo hiểm tài chính')
+            break
+    for i in classify_kw[71:74]:
+        if i in row['works']:
+            type.append('bảo hiểm kinh doanh')
+            break
+    for i in classify_kw[74:79]:
+        if i in row['works']:
+            type.append('bảo hiểm tai nạn')
+            break
+    for i in classify_kw[79:90]:
+        if i in row['works']:
+            type.append('bảo hiểm tài sản')
+            break
+    for i in classify_kw[96:100]:
+        if i in row['works']:
+            type.append('bảo hiểm hàng không')
+            break
+    for i in classify_kw[100:107]:
+        if i in row['works']:
+            type.append('bảo hiểm thương mại')
+            break
+    for i in classify_kw[107:111]:
+        if i in row['works']:
+            type.append('bảo hiểm hàng hóa')
+            break
+    for i in classify_kw[111:116]:
+        if i in row['works']:
+            type.append('bảo hiểm thiệt hại')
+            break
+    for i in classify_kw[116:119]:
+        if i in row['works']:
+            type.append('bảo hiểm nông nghiệp')
+            break
+    for i in classify_kw[119:125]:
+        if i in row['works']:
+            type.append('bảo hiểm phi nhân thọ')
+            break
+    for i in classify_kw[125:128]:
+        if i in row['works']:
+            type.append('bảo hiểm cháy nổ')
+            break
+    for i in classify_kw[128:132]:
+        if i in row['works']:
+            type.append('bảo hiểm tổng hợp')
+            break
+    if not type: type.append('other')
     while True:
         if 'manulife' in row['works']:
             company.append('manulife')
@@ -150,6 +225,7 @@ for index, row in df.iterrows():
                 break
         break
     if not company: company.append('other')
+    row['loại bảo hiểm'] = ', '.join(str(s) for s in type)
     row['công ty bảo hiểm'] = ', '.join(str(s) for s in company)
 df.reset_index(drop=True, inplace=True)
 print(df)
