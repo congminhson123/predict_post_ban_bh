@@ -53,8 +53,8 @@ try:
             works=doc['_source']['works']
             if len(works):
                 for work in works:
-                    position = work['position'].lower()
-                    employer = work['employer'].lower()
+                    position = work['position']
+                    employer = work['employer']
                     if position is not None:
                         list_user_work.append(position)
                         user_id.append(doc['_source']['id'])
