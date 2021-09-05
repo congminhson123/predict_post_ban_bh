@@ -19,7 +19,7 @@ list_post = list()
 docId_post = list()
 user_id = set()
 body = {
-    'size': 10000,
+    'size': 200,
     'query': {
         'bool': {
             'must': [
@@ -42,9 +42,7 @@ body = {
         }
     },
     'track_total_hits': True,
-    # '_source': [
-    #     'userId', 'message', 'description'
-    # ]
+
 }
 
 for i in keywords:
@@ -58,7 +56,7 @@ for i in mustnot:
 
 month = 8
 month = f'{month:02d}'
-for i in range(1, 31):
+for i in range(27, 32):
     day = i
     day = f'{day:02d}'
     index = f'dsminer_post_2021-{month}-{day}'
@@ -70,7 +68,7 @@ for i in range(1, 31):
                 message = res['_source']['message']
                 description = res['_source']['description']
                 docId = res['_source']['docId']
-                user_id.add(res['_source']['userId'])
+                # user_id.add(res['_source']['userId'])
                 if message is not None:
                     list_post.append(message)
                     docId_post.append(docId)
@@ -98,10 +96,14 @@ for i in range(1, 31):
 #             )
 #     list_data.append(data)
 #     print(i)
-print(len(user_id))
-with open('user_id.txt', 'w') as f:
-    for item in user_id:
-        f.write(item+"\n")
+# print(len(user_id))
+# with open('user_id.txt', 'w') as f:
+#     for item in user_id:
+#         f.write(item+"\n")
 df = DataFrame({'docId_post':docId_post, 'post':list_post})
+nan_value = float("NaN")
+df.replace("", nan_value, inplace=True)
+df = df.dropna(axis=0, subset=['post'])
+print(df)
 df.to_excel(r'data_rule.xlsx', encoding='utf-8')
 

@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\classify_user.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\predict ban bh.py">
           <value>
             <Attribute>

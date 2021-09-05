@@ -58,7 +58,7 @@ for i in mustnot:
 
 month = 8
 month = f'{month:02d}'
-for i in range(1, 32    ):
+for i in range(31, 32    ):
     day = i
     day = f'{day:02d}'
     index = f'dsminer_post_2021-{month}-{day}'
