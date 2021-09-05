@@ -51,7 +51,7 @@ try:
 
         for doc in res['hits']['hits']:
             works = doc['_source']['works']
-            if len(works) > 1:
+            if len(works) > 0:
                 for work in works:
                     position = work['position']
                     employer = work['employer']
